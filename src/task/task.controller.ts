@@ -19,21 +19,24 @@ import { AuthGuard } from 'src/auth/auth.guard';
 
 @Controller('task')
 export class TaskController {
-  constructor(private readonly taskService: TaskService) { }
+  constructor(private readonly taskService: TaskService) {}
 
   @Post()
   @UseGuards(AuthGuard)
   @Header('Content-Type', 'application/json')
   create(@Body() createTaskDto: CreateTaskDto, @Request() req: any) {
     if (!createTaskDto.title) {
-      throw new HttpException('Title is required.', HttpStatus.BAD_REQUEST)
+      throw new HttpException('Title is required.', HttpStatus.BAD_REQUEST);
     }
 
     if (createTaskDto.title.length < 3) {
-      throw new HttpException('The title is too short. Please make sure it is at least 3 characters long.', HttpStatus.BAD_REQUEST);
+      throw new HttpException(
+        'The title is too short. Please make sure it is at least 3 characters long.',
+        HttpStatus.BAD_REQUEST,
+      );
     }
 
-    createTaskDto.FkIdUser = req.user.sub
+    createTaskDto.FkIdUser = req.user.sub;
 
     return this.taskService.create(createTaskDto);
   }
@@ -49,14 +52,18 @@ export class TaskController {
   @UseGuards(AuthGuard)
   @Header('Content-Type', 'application/json')
   findOne(@Param('id') id: string, @Request() req: any) {
-    const userId = req.user.sub
+    const userId = req.user.sub;
     return this.taskService.findOne(+id, userId);
   }
 
   @Patch(':id')
   @UseGuards(AuthGuard)
   @Header('Content-Type', 'application/json')
-  update(@Param('id') id: string, @Body() updateTaskDto: UpdateTaskDto, @Request() req: any) {
+  update(
+    @Param('id') id: string,
+    @Body() updateTaskDto: UpdateTaskDto,
+    @Request() req: any,
+  ) {
     const userId = req.user.sub;
     return this.taskService.update(+id, updateTaskDto, userId);
   }
@@ -64,7 +71,7 @@ export class TaskController {
   @Delete(':id')
   @UseGuards(AuthGuard)
   remove(@Param('id') id: string, @Request() req: any) {
-    const userId = req.user.sub
+    const userId = req.user.sub;
     return this.taskService.remove(+id, userId);
   }
 }

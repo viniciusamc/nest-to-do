@@ -1,12 +1,11 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
 import { DataSource } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
-  constructor(private dataSource: DataSource) { }
+  constructor(private dataSource: DataSource) {}
 
   async create(createUserDto: CreateUserDto) {
     const queryRunner = this.dataSource.createQueryRunner();

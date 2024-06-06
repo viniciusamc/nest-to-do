@@ -15,13 +15,15 @@ import { AuthGuard } from './auth.guard';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) { }
+  constructor(private readonly authService: AuthService) {}
 
   @HttpCode(200)
   @Post()
   create(@Body() createAuthDto: CreateAuthDto) {
-    if (!createAuthDto.email) throw new HttpException('Email is required', HttpStatus.BAD_REQUEST)
-    if (!createAuthDto.password) throw new HttpException('Password is required', HttpStatus.BAD_REQUEST)
+    if (!createAuthDto.email)
+      throw new HttpException('Email is required', HttpStatus.BAD_REQUEST);
+    if (!createAuthDto.password)
+      throw new HttpException('Password is required', HttpStatus.BAD_REQUEST);
 
     return this.authService.signIn(createAuthDto.email, createAuthDto.password);
   }

@@ -12,3 +12,14 @@ services:
       - "5432:5432"
     volumes:
       - ./configs/init.sql:/docker-entrypoint-initdb.d/init.sql
+  redis:
+    image: redis
+    ports:
+      - "6379:6379"
+
+  mailcatcher:
+      restart: on-failure
+      image: dockage/mailcatcher:0.9.0
+      ports:
+          - '1080:1080'
+          - '1025:1025'
