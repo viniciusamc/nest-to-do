@@ -1,11 +1,16 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { DataSource } from 'typeorm';
 import * as bcrypt from 'bcrypt';
+import { InjectQueue } from '@nestjs/bull';
+import { Queue } from 'bull';
 
 @Injectable()
 export class UsersService {
-  constructor(private dataSource: DataSource) {}
+  constructor(
+    private dataSource: DataSource,
+    @InjectQueue('user') private userQueue: Queue,
+  ) { }
 
   async create(createUserDto: CreateUserDto) {
     const queryRunner = this.dataSource.createQueryRunner();
@@ -35,7 +40,17 @@ export class UsersService {
     await queryRunner.commitTransaction();
 
     await queryRunner.release();
-    return 'ok';
+
+    await this.userQueue.add(
+      {
+        email: createUserDto.email,
+      },
+      {
+        attempts: 5,
+      },
+    );
+
+    return 'See your email';
   }
 
   async findOne(email: string) {

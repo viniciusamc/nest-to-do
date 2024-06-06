@@ -219,12 +219,15 @@ export class TaskService {
     }
   }
 
-  @Cron(CronExpression.EVERY_5_SECONDS)
+  @Cron(CronExpression.EVERY_MINUTE)
   async handleCron() {
-    await this.taskQueue.add({
-      email: 'task@task.com',
-    }, {
+    await this.taskQueue.add(
+      {
+        email: 'task@task.com',
+      },
+      {
         attempts: 3,
-      });
+      },
+    );
   }
 }

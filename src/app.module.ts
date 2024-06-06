@@ -39,15 +39,15 @@ import { MailerModule } from '@nestjs-modules/mailer';
         port: parseInt(process.env.REDIS_PORT),
       },
     }),
+    BullModule.registerQueue({
+      name: 'user'
+    }),
     ScheduleModule.forRoot(),
     MailerModule.forRoot({
       transport: {
         host: process.env.EMAIL_HOST,
         port: parseInt(process.env.EMAIL_PORT),
-      },
-      defaults: {
-        from: '"to-do" <todo@todo.com>',
-      },
+      }
     }),
   ],
   controllers: [AppController],
