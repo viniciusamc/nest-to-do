@@ -10,7 +10,7 @@ export class UsersService {
   constructor(
     private dataSource: DataSource,
     @InjectQueue('user') private userQueue: Queue,
-  ) { }
+  ) {}
 
   async create(createUserDto: CreateUserDto) {
     const queryRunner = this.dataSource.createQueryRunner();

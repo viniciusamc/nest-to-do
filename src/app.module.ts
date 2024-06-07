@@ -40,14 +40,14 @@ import { MailerModule } from '@nestjs-modules/mailer';
       },
     }),
     BullModule.registerQueue({
-      name: 'user'
+      name: 'user',
     }),
     ScheduleModule.forRoot(),
     MailerModule.forRoot({
       transport: {
         host: process.env.EMAIL_HOST,
         port: parseInt(process.env.EMAIL_PORT),
-      }
+      },
     }),
   ],
   controllers: [AppController],
